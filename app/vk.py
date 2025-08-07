@@ -3,7 +3,7 @@ import asyncio
 from datetime import datetime, timezone, timedelta
 
 from .utils import send_message_to_channel
-from config import VK_TOKEN
+from config import redis_client, VK_TOKEN
 
 
 class VK:
@@ -83,6 +83,7 @@ class VK:
 
     async def run(self):
         try:
+            print("✅ VKParser запущен и слушает обсуждения...")
             while True:
                 posts_data = await self.fetch_posts()
                 now = datetime.now(timezone.utc)
@@ -95,7 +96,9 @@ class VK:
                             comments = comments_data["response"].get("items", [])
                             for item in comments:
                                 comment_id = item["id"]
-
+                                key = f"vk_comment:{comment_id}"
+                                if await redis_client.exists(key):
+                                    continue
                                 date_unix = item.get("date")
                                 if date_unix is None:
                                     continue
@@ -103,6 +106,8 @@ class VK:
                                 comment_age = now - comment_date
                                 if comment_age > timedelta(hours=24):
                                     continue
+                                await redis_client.set(key, 1)
+                                await redis_client.expire(key, 604800)
 
                                 from_id = item.get("from_id")
                                 text = item.get("text", "")
