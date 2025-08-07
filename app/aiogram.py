@@ -11,7 +11,7 @@ from .bitrix import add_bitrix_lead
 
 
 router = Router()
-CHANNEL_OUTPUT_ID = -1002782595629
+CHANNEL_OUTPUT_ID = -1002881031125
 
 
 @router.callback_query(F.data=="delete_message")

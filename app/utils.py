@@ -3,7 +3,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from config import bot
 
 
-CHANNEL_OUTPUT_ID = -1002782595629
+CHANNEL_OUTPUT_ID = -1002881031125
 
 
 async def send_message_to_channel(data: dict):

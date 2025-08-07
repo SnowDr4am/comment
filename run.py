@@ -8,7 +8,7 @@ from app.vk import VK
 async def run():
     dp.include_router(router)
 
-    tg_parser_task = telegram.init("@snowdr4am5")
+    tg_parser_task = telegram.init("@lescom_public")
     aiogram_task = dp.start_polling(bot)
     vkontakte_init = VK()
 
